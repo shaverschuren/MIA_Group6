@@ -6,5 +6,5 @@ Aanrader: Gebruik PyCharm om het project te structureren. Dit is ook makkelijk t
 Het is de bedoeling dat het verslag geschreven wordt in Overleaf. 
 Verdere communicatie kan via de app-groep gedaan worden.
 
-Eerste deadline: 23 september 2019. Informatie over het project vind je [hier](https://github.com/tueimage/8dc00-mia/blob/master/notebooks/registration_project.ipynb).
+Eerste deadline: 30 september 2019. Informatie over het project vind je [hier](https://github.com/tueimage/8dc00-mia/blob/master/notebooks/registration_project.ipynb).
 
