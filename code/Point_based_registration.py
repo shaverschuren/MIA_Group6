@@ -9,5 +9,6 @@ from IPython.display import display, clear_output
 def pbr(X,Xm);
     X=util.c2h(X)
     Xm=util.c2h(Xm)
-    T=ls_affine(X,Xm)
+    T=reg.ls_affine(X,Xm)
+    
 
