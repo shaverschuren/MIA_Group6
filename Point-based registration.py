@@ -1,0 +1,1 @@
+I_path='../data/image_data/'
