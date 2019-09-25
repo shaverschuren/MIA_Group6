@@ -342,9 +342,18 @@ def ngradient(fun, x, h=1e-3):
     # Implement the  computation of the partial derivatives of
     # the function at x with numerical differentiation.
     # g[k] should store the partial derivative w.r.t. the k-th parameter
-    g=np.zeros(x.size);
-    for i in range(len(x)):
-        g[i]= (fun(x[i].item()+h/2)-fun(x[i].item()-h/2))/h
+
+    # g=np.zeros(x.size);
+    # for i in range(len(x)):
+    #     g[i]= (fun(x[i].item()+h/2)-fun(x[i].item()-h/2))/h
+    if len(fun(x))!=1:
+        g = ((fun(x + h / 2)[0] - fun(x - h / 2)[0]))/h
+        return g
+    print(x+h/2,type(x+h/2))
+    g = ((fun(x + h / 2) - fun(x - h / 2)))/h
+    print('g',g)
+
+
     #------------------------------------------------------------------#
     return g
 
@@ -364,6 +373,7 @@ def rigid_corr(I, Im, x):
 
     SCALING = 100
 
+    print('infunc',x)
     # the first element is the rotation angle
     T = rotate(x[0])
 
@@ -384,7 +394,7 @@ def rigid_corr(I, Im, x):
     # compute the similarity between the fixed and transformed
     # moving image
     C = correlation(I, Im_t)
-
+    print('C',C)
     return C, Im_t, Th
 
 
@@ -395,7 +405,7 @@ def affine_corr(I, Im, x):
     # I - fixed image
     # Im - moving image
     # x - parameters of the rigid transform: the first element
-    #     is the roation angle, the second and third are the
+    #     is the rotation angle, the second and third are the
     #     scaling parameters, the fourth and fifth are the
     #     shearing parameters and the remaining two elements
     #     are the translation
@@ -407,8 +417,9 @@ def affine_corr(I, Im, x):
     SCALING = 100
 
     #------------------------------------------------------------------#
-    # TODO: Implement the missing functionality
+    # Implement the missing functionality
     T = rotate(x[0])
+
 
     #------------------------------------------------------------------#
 

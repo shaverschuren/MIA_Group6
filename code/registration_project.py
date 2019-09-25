@@ -29,7 +29,7 @@ def intensity_based_registration_demo():
     # in which the first two input parameters (fixed and moving image)
     # are fixed and the only remaining parameter is the vector x with the
     # parameters of the transformation
-    fun = lambda x: reg.rigid_corr(I, Im, x)
+    fun = lambda y: reg.rigid_corr(I, Im, y)
 
     # the learning rate
     mu = 0.001
@@ -65,10 +65,13 @@ def intensity_based_registration_demo():
 
     # perform 'num_iter' gradient ascent updates
     for k in np.arange(num_iter):
-
         # gradient ascent
         g = reg.ngradient(fun, x)
-        x += g*mu
+        print('g2',g)
+        print('mu',mu)
+        print('gmu',g*mu)
+        print(x+g*mu)
+        x+=g*mu
 
         # for visualization of the result
         S, Im_t, _ = fun(x)
