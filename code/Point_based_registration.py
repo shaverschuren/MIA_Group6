@@ -19,15 +19,18 @@ def pbr(I_path,Im_path):
     It, Xt = reg.image_transform(Im,T)
 
 
-    fig = plt.figure(figsize=(8, 5))
+    fig = plt.figure(figsize=(30, 30))
 
     ax1 = fig.add_subplot(121)
+    ax1.set_title('Overlay of original images',fontsize=35)
+    ax1.axis('off')
     im11 = ax1.imshow(I)
     im12 = ax1.imshow(Im, alpha=0.7)
-
+    
+    
     ax2 = fig.add_subplot(122)
+    ax2.set_title('Overlay transformed image over the fixed image',fontsize=35)
+    ax2.axis('off')   
     im21 = ax2.imshow(I)
     im22 = ax2.imshow(It, alpha=0.7)
-
-    fig.show()
 
