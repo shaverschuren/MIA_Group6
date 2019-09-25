@@ -389,29 +389,36 @@ def rigid_corr(I, Im, x):
 
 
 def affine_corr(I, Im, x):
-    # Computes normalized cross-corrleation between a fixed and
+    # Computes normalized cross-correlation between a fixed and
     # a moving image transformed with an affine transformation.
     # Input:
     # I - fixed image
     # Im - moving image
-    # x - parameters of the rigid transform: the first element
+    # x - parameters of the affine transform: the first element
     #     is the rotation angle, the second and third are the
     #     scaling parameters, the fourth and fifth are the
     #     shearing parameters and the remaining two elements
     #     are the translation
     # Output:
-    # C - normalized cross-corrleation between I and T(Im)
+    # C - normalized cross-correlation between I and T(Im)
     # Im_t - transformed moving image T(Im)
 
     NUM_BINS = 64
     SCALING = 100
 
-    #------------------------------------------------------------------#
-    # Implement the missing functionality
-    T = rotate(x[0])
+    # Assemble transformation matrix (according to parameter sequence)
+    T_rot = rotate(x[0])
+    T_scale = scale(x[1], x[2])
+    T_shear = shear(x[3], x[4])
+    T = T_shear.dot(T_scale.dot(T_rot))
 
+    Th = util.c2h(T, x[5:] * SCALING)
 
-    #------------------------------------------------------------------#
+    #Transform moving image
+    Im_t, Xt = image_transform(Im, Th)
+
+    #Calculate correlation between images
+    C = correlation(I,Im_t)
 
     return C, Im_t, Th
 
@@ -433,9 +440,27 @@ def affine_mi(I, Im, x):
 
     NUM_BINS = 64
     SCALING = 100
-    
-    #------------------------------------------------------------------#
-    # TODO: Implement the missing functionality
-    #------------------------------------------------------------------#
+
+    # Assemble transformation matrix (according to parameter sequence)
+    T_rot = rotate(x[0])
+    T_scale = scale(x[1], x[2])
+    T_shear = shear(x[3], x[4])
+    T = T_shear.dot(T_scale.dot(T_rot))
+
+    Th = util.c2h(T, x[5:] * SCALING)
+
+    # Transform moving image
+    Im_t, Xt = image_transform(Im, Th)
+
+    # Compute joint histogram
+    p = joint_histogram(I,Im_t,NUM_BINS)
+
+    # Now use the joint histogram to compute mutual information
+    MI_1 = mutual_information_e(p)
+    MI_2 = mutual_information(p)
+
+    assert abs(MI_1-MI_2) < 0.001, "Something went wrong with the computation of mutual information..."
+
+    MI = MI_1
 
     return MI, Im_t, Th
