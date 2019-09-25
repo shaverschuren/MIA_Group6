@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import registration as reg
 from IPython.display import display, clear_output
 
-
 def intensity_based_registration_demo():
 
     # read the fixed and moving images
@@ -29,7 +28,12 @@ def intensity_based_registration_demo():
     # in which the first two input parameters (fixed and moving image)
     # are fixed and the only remaining parameter is the vector x with the
     # parameters of the transformation
-    fun = lambda y: reg.rigid_corr(I, Im, y)
+
+    # Function gave error due to passing of more than just the correlation
+    # value (also transformed picture and transformation). This small change
+    # solves this problem...
+    fun = lambda x: (reg.rigid_corr(I, Im, x))[0]
+    fun_full = lambda x: reg.rigid_corr(I, Im, x)
 
     # the learning rate
     mu = 0.001
@@ -65,16 +69,13 @@ def intensity_based_registration_demo():
 
     # perform 'num_iter' gradient ascent updates
     for k in np.arange(num_iter):
+
         # gradient ascent
         g = reg.ngradient(fun, x)
-        print('g2',g)
-        print('mu',mu)
-        print('gmu',g*mu)
-        print(x+g*mu)
-        x+=g*mu
+        x += g*mu
 
         # for visualization of the result
-        S, Im_t, _ = fun(x)
+        S, Im_t, _ = fun_full(x)
 
         clear_output(wait = True)
 
