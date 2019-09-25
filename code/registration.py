@@ -338,23 +338,13 @@ def ngradient(fun, x, h=1e-3):
     # Output:
     # g - vector of partial derivatives (gradient) of fun
 
-    #------------------------------------------------------------------#
-    # Implement the  computation of the partial derivatives of
-    # the function at x with numerical differentiation.
-    # g[k] should store the partial derivative w.r.t. the k-th parameter
+    g = np.zeros(np.size(x))
 
-    # g=np.zeros(x.size);
-    # for i in range(len(x)):
-    #     g[i]= (fun(x[i].item()+h/2)-fun(x[i].item()-h/2))/h
-    if len(fun(x))!=1:
-        g = ((fun(x + h / 2)[0] - fun(x - h / 2)[0]))/h
-        return g
-    print(x+h/2,type(x+h/2))
-    g = ((fun(x + h / 2) - fun(x - h / 2)))/h
-    print('g',g)
+    for par in range(0, np.size(x)):
+        h_column = np.zeros(np.size(x))
+        h_column[par] = h/2
+        g[par] = (fun(np.add(x, h_column))-fun(np.subtract(x, h_column)))/h         ####### CHANGE: Removed *(...)
 
-
-    #------------------------------------------------------------------#
     return g
 
 
