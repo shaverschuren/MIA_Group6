@@ -317,9 +317,9 @@ def mutual_information_e(p):
     HI = -p_I.transpose().dot(np.log(p_I))
     HJ = -p_J.dot(np.log(p_J.transpose()))
     HIJ = -sum(sum(p*(np.log(p))))
-    print('HI',HI,'HJ',HJ,'HIJ',HIJ)
+    # print('HI',HI,'HJ',HJ,'HIJ',HIJ)
     MI = HI+HJ-HIJ
-    print('MI',MI)
+    # print('MI',MI)
 
     #------------------------------------------------------------------#
 
@@ -363,7 +363,7 @@ def rigid_corr(I, Im, x):
 
     SCALING = 100
 
-    print('infunc',x)
+    # print('infunc',x)
     # the first element is the rotation angle
     T = rotate(x[0])
 
@@ -384,7 +384,7 @@ def rigid_corr(I, Im, x):
     # compute the similarity between the fixed and transformed
     # moving image
     C = correlation(I, Im_t)
-    print('C',C)
+    # print('C',C)
     return C, Im_t, Th
 
 
