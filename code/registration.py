@@ -135,11 +135,9 @@ def ls_solve(A, b):
 
     #------------------------------------------------------------------#
     # Implement the least-squares solution for w.
-
     b=b.reshape(b.size,1)
     At=A.transpose()
     w=np.linalg.inv(At.dot(A)).dot(At.dot(b))
-
     #------------------------------------------------------------------#
 
     # compute the error
@@ -162,12 +160,10 @@ def ls_affine(X, Xm):
     # Implement least-squares fitting of an affine transformation.
     # Use the ls_solve() function that you have previously implemented.
     B = X.transpose()
-
-    T1,E1 = ls_solve(A,B[:,0])
+    T1,E1= ls_solve(A,B[:,0])
     T2,E2= ls_solve(A,B[:,1])
     Tlast=np.append(np.zeros(len(T1)-1),1)
     T=np.concatenate((T1,T2,Tlast.reshape(len(T1),1)),axis=1).transpose()
-
     #------------------------------------------------------------------#
 
     return T
