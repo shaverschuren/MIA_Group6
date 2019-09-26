@@ -483,4 +483,4 @@ def pbr(I_path, Im_path):
     # Transform Im
     Im_t, X_t = image_transform(Im, T)
 
-    return Im_t, X_t
+    return Im_t, X_t, X, Xm, T
