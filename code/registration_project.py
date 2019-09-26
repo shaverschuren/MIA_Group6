@@ -99,7 +99,7 @@ def intensity_based_registration_demo():
         display(fig)
 
 
-def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0):
+def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0, plotim=1):
 
     # r_a_switch: 0 --> rigid (default)
     #             1 --> affine
@@ -156,53 +156,53 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
     #Which results in the following formula for mu:
     fun_mu = lambda i: mu*np.exp(-5*i/num_iter)         # Which results in an initial mu at iteration 1 and a mu/200 at final iteration
 
+    # number of iterations
+    num_iter = 50
     iterations = np.arange(1, num_iter+1)
     similarity = np.full((num_iter, 1), np.nan)
 
-    fig = plt.figure(figsize=(14,6))
+    if plotim==1:
+        fig = plt.figure(figsize=(14,6))
 
-    # fixed and moving image, and parameters
-    ax1 = fig.add_subplot(121)
+        # fixed and moving image, and parameters
+        ax1 = fig.add_subplot(121)
 
-    # fixed image
-    im1 = ax1.imshow(I)
-    # moving image
-    im2 = ax1.imshow(I, alpha=0.7)
-    # parameters
-    txt = ax1.text(0.3, 0.95,
-        np.array2string(x, precision=5, floatmode='fixed'),
-        bbox={'facecolor': 'white', 'alpha': 1, 'pad': 10},
-        transform=ax1.transAxes)
+        # fixed image
+        im1 = ax1.imshow(I)
+        # moving image
+        im2 = ax1.imshow(I, alpha=0.7)
+        # parameters
+        txt = ax1.text(0.3, 0.95,
+            np.array2string(x, precision=5, floatmode='fixed'),
+            bbox={'facecolor': 'white', 'alpha': 1, 'pad': 10},
+            transform=ax1.transAxes)
 
-    # 'learning' curve
-    ax2 = fig.add_subplot(122, xlim=(0, num_iter), ylim=(0, 1.1))
+        # 'learning' curve
+        ax2 = fig.add_subplot(122, xlim=(0, num_iter), ylim=(0, 1))
 
-    learning_curve, = ax2.plot(iterations, similarity, lw=2)
-    ax2.set_xlabel('Iteration')
-    ax2.set_ylabel('Similarity')
-    ax2.grid()
+        learning_curve, = ax2.plot(iterations, similarity, lw=2)
+        ax2.set_xlabel('Iteration')
+        ax2.set_ylabel('Similarity')
+        ax2.grid()
 
     # perform 'num_iter' gradient ascent updates
     i = 0
     for k in np.arange(num_iter):
-
+        mu=((k-num_iter)**2/(num_iter)**2)/1000
         # gradient ascent
         g = reg.ngradient(fun, x)
-        x += g*fun_mu(i)
+        x += g*mu
 
         # for visualization of the result
         S, Im_t, _ = fun_full(x)
-
         clear_output(wait = True)
-
-        # update moving image and parameters
-        im2.set_data(Im_t)
-        txt.set_text(np.array2string(x, precision=5, floatmode='fixed'))
-
-        # update 'learning' curve
         similarity[k] = S
-        learning_curve.set_ydata(similarity)
+        # update moving image and parameters
+        if plotim==1:
+            im2.set_data(Im_t)
+            txt.set_text(np.array2string(x, precision=5, floatmode='fixed'))
+            # update 'learning' curve
+            learning_curve.set_ydata(similarity)
+            display(fig)
 
-        display(fig)
-
-        i = i+1
+    return similarity
