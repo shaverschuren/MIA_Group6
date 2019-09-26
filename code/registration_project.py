@@ -7,6 +7,14 @@ import matplotlib.pyplot as plt
 import registration as reg
 from IPython.display import display, clear_output
 
+# def fun(I, Im, x):
+#     print(x)
+#     f = reg.rigid_corr(I, Im, x)
+#     C = f[0]
+#     Im_t = f[1]
+#     Th = f[2]
+#     return C
+
 
 def intensity_based_registration_demo():
 
@@ -134,20 +142,19 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
     fun = lambda x: (sim_fun(I, Im, x))[0]
     fun_full = lambda x: sim_fun(I, Im, x)
 
-    # if r_a_switch == 0:
-    #     fun = lambda x: (reg.rigid_corr(I, Im, x))[0]
-    #     fun_full = lambda x: reg.rigid_corr(I, Im, x)
-    # elif r_a_switch == 1:
-    #     fun = lambda x: (reg.affine_corr(I, Im, x))[0]
-    #     fun_full = lambda x: reg.affine_corr(I, Im, x)
-    # else:
-    #     print("ERROR.. r_a_switch must be either 0 or 1")
+    if corr_mi_switch == 0:
+        # the initial learning rate
+        mu = 0.005
+        # number of iterations
+        num_iter = 50
+    else:
+        # the initial learning rate
+        mu = 0.003
+        # number of iterations
+        num_iter = 30
 
-    # the learning rate
-    mu = 0.001
-
-    # number of iterations
-    num_iter = 200
+    #Which results in the following formula for mu:
+    fun_mu = lambda i: mu*np.exp(-5*i/num_iter)         # Which results in an initial mu at iteration 1 and a mu/200 at final iteration
 
     iterations = np.arange(1, num_iter+1)
     similarity = np.full((num_iter, 1), np.nan)
@@ -168,7 +175,7 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
         transform=ax1.transAxes)
 
     # 'learning' curve
-    ax2 = fig.add_subplot(122, xlim=(0, num_iter), ylim=(0, 1))
+    ax2 = fig.add_subplot(122, xlim=(0, num_iter), ylim=(0, 1.1))
 
     learning_curve, = ax2.plot(iterations, similarity, lw=2)
     ax2.set_xlabel('Iteration')
@@ -176,11 +183,12 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
     ax2.grid()
 
     # perform 'num_iter' gradient ascent updates
+    i = 0
     for k in np.arange(num_iter):
 
         # gradient ascent
         g = reg.ngradient(fun, x)
-        x += g*mu
+        x += g*fun_mu(i)
 
         # for visualization of the result
         S, Im_t, _ = fun_full(x)
@@ -196,3 +204,5 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
         learning_curve.set_ydata(similarity)
 
         display(fig)
+
+        i = i+1
