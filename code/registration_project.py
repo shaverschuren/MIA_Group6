@@ -192,7 +192,6 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
         # gradient ascent
         g = reg.ngradient(fun, x)
         x += g*mu
-
         # for visualization of the result
         S, Im_t, _ = fun_full(x)
         clear_output(wait = True)
