@@ -12,9 +12,7 @@ from os import walk
 # extracting and sorting images from dir
 for dirpath, dirnames, filenames in walk(r'..\data\image_data'):
     f=filenames
-t1d = list()
-t1 = list()
-t2 = list()
+[t1d,t1,t2] = [list() for i in range(3)]
 for i in f:
     if i[-5] == 'd':
         t1d.append(i)
@@ -26,8 +24,6 @@ for i in f:
 # assigning space
 [cor_pbr,cor_pbr2,cor_cc_rig,cor_cc_rig2,cor_cc_af,cor_cc_af2]=[ np.zeros(len(t1)) for i in range(6)]
 [MI_pbr,MI_pbr2,MI_cc_rig,MI_cc_rig2,MI_cc_af,MI_cc_af2]= [np.zeros(len(t1)) for i in range(6)]
-
-
 
 # executing registration and saving coralation and mutual information
 for i in range(1):
@@ -73,11 +69,11 @@ print(MI_cc_af)
 plt.close()
 #plt.plot(np.arange(1,len(sim1)+1,1),sim1)
 fig,ax = plt.subplots()
-toplot=[cor_pbr,cor_pbr2,cor_cc_rig,cor_cc_rig2,cor_cc_af,cor_cc_af2]
+toplot_cor=[cor_pbr,cor_pbr2,cor_cc_rig,cor_cc_rig2,cor_cc_af,cor_cc_af2]
 
-for i in range(len(toplot)):
-    ax.plot((i+1)*np.ones(len(toplot[i])),toplot[i],'k.')
-    ax.plot((i+1),np.mean(toplot[i]),'rx')
+for i in range(len(toplot_cor)):
+    ax.plot((i+1)*np.ones(len(toplot_cor[i])),toplot_cor[i],'k.')
+    ax.plot((i+1),np.mean(toplot_cor[i]),'rx')
 
 plt.xlim([0,7])
 plt.ylim([0,1])
@@ -85,5 +81,6 @@ plt.grid(True)
 x_ticks_labels = ['pbr_t1t1','pbr_t1t2','ib_cc_rig_t1t1','ib_cc_rig_t1t2','ib_cc_af_t1t1','ib_cc_af_t1t1']
 plt.xticks(np.arange(1,7,1),x_ticks_labels)
 
-
+toplot_MI = [MI_pbr,MI_pbr2,MI_cc_rig,MI_cc_rig2,MI_cc_af,MI_cc_af2]:
+#TODO add plotting
 plt.show()
