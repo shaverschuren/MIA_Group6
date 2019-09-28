@@ -145,13 +145,9 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
     if corr_mi_switch == 0:
         # the initial learning rate
         mu = 0.005
-        # number of iterations
-        num_iter = 50
     else:
         # the initial learning rate
         mu = 0.003
-        # number of iterations
-        num_iter = 30
 
     #Which results in the following formula for mu:
     fun_mu = lambda i: mu*np.exp(-5*i/num_iter)         # Which results in an initial mu at iteration 1 and a mu/200 at final iteration
@@ -188,7 +184,7 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
     # perform 'num_iter' gradient ascent updates
     i = 0
     for k in np.arange(num_iter):
-        mu=((k-num_iter)**2/(num_iter)**2)/1000
+        mu = mu * np.exp(-5 * i / num_iter)
         # gradient ascent
         g = reg.ngradient(fun, x)
         x += g*mu
@@ -204,4 +200,4 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
             learning_curve.set_ydata(similarity)
             display(fig)
 
-    return similarity
+    return similarity, I, Im_t

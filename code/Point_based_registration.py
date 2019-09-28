@@ -18,7 +18,6 @@ def pbr(I_path,Im_path):
     T=reg.ls_affine(X,Xm)
     It, Xt = reg.image_transform(Im,T)
 
-
     fig = plt.figure(figsize=(30, 30))
 
     ax1 = fig.add_subplot(121)
@@ -33,4 +32,5 @@ def pbr(I_path,Im_path):
     ax2.axis('off')   
     im21 = ax2.imshow(I)
     im22 = ax2.imshow(It, alpha=0.7)
+    return I,Im,It
 
