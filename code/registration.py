@@ -5,6 +5,7 @@ Registration module main code.
 import numpy as np
 from scipy import ndimage
 import registration_util as util
+import matplotlib.pyplot as plt
 
 
 # SECTION 1. Geometrical transformations
@@ -464,3 +465,22 @@ def affine_mi(I, Im, x):
     MI = MI_1
 
     return MI, Im_t, Th
+
+def pbr(I_path, Im_path):
+    # Load in images
+    I = plt.imread(I_path)
+    Im = plt.imread(Im_path)
+
+    # Set control points
+    X, Xm = util.my_cpselect(I_path, Im_path)
+
+    Xh = util.c2h(X)
+    Xmh = util.c2h(Xm)
+
+    # Find optimal affine transformation
+    T = ls_affine(Xh, Xmh)
+
+    # Transform Im
+    Im_t, X_t = image_transform(Im, T)
+
+    return Im_t, X_t, X, Xm, T
