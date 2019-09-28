@@ -25,13 +25,15 @@ for i in f:
 [cor_pbr,cor_pbr2,cor_cc_rig,cor_cc_rig2,cor_cc_af,cor_cc_af2]=[ np.zeros(len(t1)) for i in range(6)]
 [MI_pbr,MI_pbr2,MI_cc_rig,MI_cc_rig2,MI_cc_af,MI_cc_af2]= [np.zeros(len(t1)) for i in range(6)]
 
+countimages=2 #len(t1)
+
 # executing registration and saving coralation and mutual information
-for i in range(1):
+for i in range(countimages):
     I,Im,It = pbr.pbr(r'..\data\image_data\\'+ t1[i] , r'..\data\image_data\\'+t1d[i])
     cor_pbr[i] = reg.correlation(I,It)
     MI_pbr[i] = reg.mutual_information(reg.joint_histogram(I,It))
 
-for i in range(1):
+for i in range(countimages):
     I,Im,It = pbr.pbr(r'..\data\image_data\\'+ t1[i] , r'..\data\image_data\\'+t2[i])
     cor_pbr2[i] = reg.correlation(I,It)
     MI_pbr2[i] = reg.mutual_information(reg.joint_histogram(I,It))
@@ -40,7 +42,7 @@ print('Point-based: done')
 
 
 # t1 to t1
-for i in range(1):
+for i in range(countimages):
     sim1, I_cc_rig, Im_cc_rig = proj.intensity_based_registration(r'..\data\image_data\\'+ t1[i] , r'..\data\image_data\\'+t1d[i] , 0 , 0 , 0)
     cor_cc_rig[i] = sim1[-1]
     MI_cc_rig[i] = reg.mutual_information(reg.joint_histogram(I_cc_rig,Im_cc_rig))
@@ -50,7 +52,7 @@ for i in range(1):
 print('T1 to T1: done')
 
 # t1 to t2
-for i in range(1):
+for i in range(countimages):
     sim1, I_cc_rig, Im_cc_rig = proj.intensity_based_registration(r'..\data\image_data\\'+ t1[i] , r'..\data\image_data\\'+t2[i] , 0 , 0 , 0)
     cor_cc_rig2[i] = sim1[-1]
     MI_cc_rig2[i] = reg.mutual_information(reg.joint_histogram(I_cc_rig,Im_cc_rig))
@@ -68,19 +70,31 @@ print(MI_cc_af)
 #plotting
 plt.close()
 #plt.plot(np.arange(1,len(sim1)+1,1),sim1)
-fig,ax = plt.subplots()
+fig1,ax1 = plt.subplots()
 toplot_cor=[cor_pbr,cor_pbr2,cor_cc_rig,cor_cc_rig2,cor_cc_af,cor_cc_af2]
 
 for i in range(len(toplot_cor)):
-    ax.plot((i+1)*np.ones(len(toplot_cor[i])),toplot_cor[i],'k.')
-    ax.plot((i+1),np.mean(toplot_cor[i]),'rx')
+    ax1.plot((i+1)*np.ones(len(toplot_cor[i])),toplot_cor[i],'k.')
+    ax1.plot((i+1),np.mean(toplot_cor[i]),'rx')
 
 plt.xlim([0,7])
 plt.ylim([0,1])
 plt.grid(True)
+plt.title('cc')
 x_ticks_labels = ['pbr_t1t1','pbr_t1t2','ib_cc_rig_t1t1','ib_cc_rig_t1t2','ib_cc_af_t1t1','ib_cc_af_t1t1']
 plt.xticks(np.arange(1,7,1),x_ticks_labels)
 
-toplot_MI = [MI_pbr,MI_pbr2,MI_cc_rig,MI_cc_rig2,MI_cc_af,MI_cc_af2]:
-#TODO add plotting
+fig2,ax2 = plt.subplots()
+toplot_MI = [MI_pbr,MI_pbr2,MI_cc_rig,MI_cc_rig2,MI_cc_af,MI_cc_af2]
+for i in range(len(toplot_MI)):
+    ax2.plot((i+1)*np.ones(len(toplot_MI[i])),toplot_MI[i],'k.')
+    ax2.plot((i+1),np.mean(toplot_MI[i]),'rx')
+
+plt.xlim([0,7])
+plt.ylim([0,1])
+plt.grid(True)
+plt.title('MI')
+x_ticks_labels = ['pbr_t1t1','pbr_t1t2','ib_cc_rig_t1t1','ib_cc_rig_t1t2','ib_cc_af_t1t1','ib_cc_af_t1t1']
+plt.xticks(np.arange(1,7,1),x_ticks_labels)
+
 plt.show()
