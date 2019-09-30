@@ -93,7 +93,7 @@ def intensity_based_registration_no_vis(I_path, Im_path, r_a_switch=0, corr_mi_s
 
         i = i+1
 
-    return similarity, iterations, I, Im_t
+    return similarity, iterations, I, Im_t, x
 
 
 # ###################### Main run ########################
@@ -127,6 +127,7 @@ similarity_list = []
 iterations_list = []
 I_list = []
 Im_t_list = []
+x_list = []
 
 # Now, actually run the program and loop over all exercises
 i = 0
@@ -151,17 +152,29 @@ for exercise in exercise_list:
     iterations_list.append(OUTPUT[1])
     I_list.append(OUTPUT[2])
     Im_t_list.append(OUTPUT[3])
+    x_list.append(OUTPUT[4])
 
     print("Final similarity: ", OUTPUT[0][29],"\n")
     stop = timeit.default_timer()
     comp_time = stop - start
     print("Computing time: ",round(comp_time,3)," seconds\n")
+
+    # Plot final registered picture:
+    fig = plt.figure(i+1)
+    ax = fig.add_subplot(111)
+
+    im1 = ax.imshow(OUTPUT[2])
+    im2 = ax.imshow(OUTPUT[3], alpha=0.7)
+    ax.set_title(("Final registered image (exercise "+str(i+1)+")"))
+    ax.text(0.1, 0.9,("Similarity: "+str(OUTPUT[0][29])),bbox={'facecolor': 'white', 'alpha': 1,'pad': 5},transform=ax.transAxes)
+    ax.axis('off')
+    fig.show()
     print("Registration complete... \n\n")
 
     i += 1
 # And now for the actual plot:
-fig = plt.figure()
-ax1 = fig.add_subplot(111, xlim=(0, 30), ylim=(0, 1.1))
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111, xlim=(0, 30), ylim=(0, 1.1))
 ax1.set_xlabel('Iteration')
 ax1.set_ylabel('Similarity [See legend]')
 ax1.set_title("Similarity curves for intensity-based registrations")
@@ -177,4 +190,4 @@ comp_time_tot = stop_tot - start_tot
 print("\nTotal computing time: ", round(comp_time_tot,3), " seconds\n")
 print("************************** END PROGRAM *************************")
 
-fig.show()
+fig1.show()
