@@ -1,3 +1,9 @@
+"""
+Code used for the plots used for comparison of pbr and ibr.
+Main author:    R.J.P. van Bergen
+                28/09/2019
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 import registration as reg

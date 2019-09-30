@@ -1,5 +1,7 @@
 """
 Code used for the generation of pbr plots
+Main author:    S.H.A. Verschuren
+                25/09/2019
 """
 
 import sys

@@ -1,8 +1,7 @@
 """
 Code used for the generation of ibr plots
-
-Author: S.H.A. Verschuren
-        30/09/2019
+Main author:    S.H.A. Verschuren
+                30/09/2019
 """
 
 import sys

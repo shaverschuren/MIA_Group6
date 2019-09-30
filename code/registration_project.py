@@ -7,13 +7,14 @@ import matplotlib.pyplot as plt
 import registration as reg
 from IPython.display import display, clear_output
 
-# def fun(I, Im, x):
-#     print(x)
-#     f = reg.rigid_corr(I, Im, x)
-#     C = f[0]
-#     Im_t = f[1]
-#     Th = f[2]
-#     return C
+# Note: This file contains two functions, being the original demo and a second version, adapted for our needs.
+# For generation of some plots, additional files have been created, being "plots.py", "generate_ibr_plots.py" and
+# "generate_pbr_plots.py". Please be advised that the function in this file will only be called upon by the functions
+# defined in "plots.py". The other two files call upon functions that are defined in the file itself, which are
+# optimised for their purposes.
+# For a clear look on how we structured the intensity-based registration process, we would like to refer you to
+# the "generate_ibr_plots.py"-file, since running this file will most likely provide the assessor with the best
+# understanding of our thought process on ibr.
 
 
 def intensity_based_registration_demo():
