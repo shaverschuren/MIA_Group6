@@ -185,10 +185,9 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
     # perform 'num_iter' gradient ascent updates
     i = 0
     for k in np.arange(num_iter):
-        mu = mu * np.exp(-5 * i / num_iter)
         # gradient ascent
         g = reg.ngradient(fun, x)
-        x += g*mu
+        x += g*fun_mu(i)
         # for visualization of the result
         S, Im_t, _ = fun_full(x)
         clear_output(wait = True)
@@ -200,5 +199,6 @@ def intensity_based_registration(I_path, Im_path, r_a_switch=0, corr_mi_switch=0
             # update 'learning' curve
             learning_curve.set_ydata(similarity)
             display(fig)
+        i += 1
 
     return similarity, I, Im_t
